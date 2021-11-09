@@ -1,0 +1,19 @@
+{
+    "name": "bgc-amazon-scrapper",
+    "version": "1.0.0",
+    "description": "amazon scrapper serverless",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "Beatriz Lima",
+    "dependencies": {
+        "@aws-sdk/client-dynamodb": "^3.40.0",
+        "@aws-sdk/util-dynamodb": "^3.40.0",
+        "chrome-aws-lambda": "^10.1.0",
+        "puppeteer-extra": "^3.2.3",
+        "serverless-iam-roles-per-function": "^3.2.0",
+        "uuid": "^8.3.2"
+    }
+}

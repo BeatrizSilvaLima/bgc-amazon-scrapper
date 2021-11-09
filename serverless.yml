@@ -1,0 +1,75 @@
+service: bgc-amazon-scrapper
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  stage: dev
+  region: sa-east-1
+  environment:
+    DYNAMODB_TABLE_NAME: ${self:custom.bestsellersTableName}
+
+custom:
+  bestsellersTableName: bestsellers-table-${self:provider.stage}
+
+plugins:
+  - serverless-iam-roles-per-function
+
+functions:
+  getBestsellers:
+    handler: functions/api.getBestsellers
+    name: get-bestsellers
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: bestsellers
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt BestSellersTable.Arn
+  getNewBestsellers:
+    handler: functions/api.getNewBestsellers
+    name: create-bestsellers
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: bestsellers
+          method: POST
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+        Resource: !GetAtt BestSellersTable.Arn
+  getHistory:
+    handler: functions/api.getHistory
+    name: get-history
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: history
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt BestSellersTable.Arn
+
+resources:
+  Resources:
+    BestSellersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.bestsellersTableName}
+        AttributeDefinitions:
+          - AttributeName: itemId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: itemId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
