@@ -87,18 +87,17 @@ const getNewBestsellers = async (event) => {
         });
 
         let aux = {bestsellers:teste,
-                    itemId:uuidv4(),
-                    data:dayjs()
-        }
+                    itemId:uuidv4()
+        };
         
 
         await browser.close();
         
-
+        //console.log(marshall(aux));
         //const body = JSON.stringify(aux);
         const params = {
             TableName: process.env.DYNAMODB_TABLE_NAME,
-            Item: aux,
+            Item: marshall(aux || {}),
         };
         const createResult = await db.send(new PutItemCommand(params));
 
