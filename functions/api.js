@@ -1,7 +1,8 @@
 const db = require("./db");
 const { v4: uuidv4 } = require('uuid');
 const chromium = require('chrome-aws-lambda');
-const { addExtra } = require('puppeteer-extra')
+var dayjs = require('dayjs');
+const { addExtra } = require('puppeteer-extra');
 const puppeteerExtra = addExtra(chromium.puppeteer);
 const {
     GetItemCommand,
@@ -84,15 +85,17 @@ const getNewBestsellers = async (event) => {
             }) 
             return books
         });
-        
-        teste.itemId = uuidv4();
 
-        teste.date = 
+        let aux = {bestsellers:teste,
+                    itemId:uuidv4(),
+                    data:dayjs()
+        }
+        
 
         await browser.close();
         
 
-        const body = JSON.parse(teste);
+        const body = JSON.stringify(aux);
         const params = {
             TableName: process.env.DYNAMODB_TABLE_NAME,
             Item: marshall(body || {}),

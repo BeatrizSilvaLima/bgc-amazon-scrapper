@@ -22,7 +22,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: bestsellers
+          path: bestsellers/{itemId}
           method: GET
     iamRoleStatements:
       - Effect: "Allow"

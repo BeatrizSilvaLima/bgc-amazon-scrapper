@@ -12,6 +12,7 @@
         "@aws-sdk/client-dynamodb": "^3.40.0",
         "@aws-sdk/util-dynamodb": "^3.40.0",
         "chrome-aws-lambda": "^10.1.0",
+        "dayjs": "^1.10.7",
         "puppeteer-extra": "^3.2.3",
         "serverless-iam-roles-per-function": "^3.2.0",
         "uuid": "^8.3.2"
