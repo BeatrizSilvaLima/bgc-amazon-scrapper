@@ -95,10 +95,10 @@ const getNewBestsellers = async (event) => {
         await browser.close();
         
 
-        const body = JSON.stringify(aux);
+        //const body = JSON.stringify(aux);
         const params = {
             TableName: process.env.DYNAMODB_TABLE_NAME,
-            Item: marshall(body || {}),
+            Item: aux,
         };
         const createResult = await db.send(new PutItemCommand(params));
 
