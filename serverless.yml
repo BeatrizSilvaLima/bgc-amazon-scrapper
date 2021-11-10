@@ -38,7 +38,7 @@ functions:
     handler: functions/api.getNewBestsellers
     name: create-bestsellers
     memorySize: 256 # mb
-    timeout: 5 # seconds
+    timeout: 30 # seconds
     events:
       - http:
           path: bestsellers
