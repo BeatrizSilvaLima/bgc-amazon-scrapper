@@ -26,14 +26,14 @@ const getBestsellers = async (event) => {
 
         console.log({ Item });
         response.body = JSON.stringify({
-            message: "Successfully retrieved post.",
+            message: "Successfully retrieved best sellers.",
             data: (Item) ? unmarshall(Item) : {},
         });
     } catch (e) {
         console.error(e);
         response.statusCode = 500;
         response.body = JSON.stringify({
-            message: "Failed to get bestsellers.",
+            message: "Failed to get best sellers.",
             errorMsg: e.message,
             errorStack: e.stack,
         });
@@ -60,18 +60,14 @@ const getNewBestsellers = async (event) => {
         await page.goto('https://www.amazon.com.br/');
         
         let html = await page.evaluate(() => {
-            let books = []; 
-            document.querySelectorAll("#nav-xshop>a").forEach(book =>( book.innerHTML.toString().includes("Mais Vendidos") ? books.push(book.getAttribute('href')) : null) )
-            return books});
+            let urls = []; 
+            document.querySelectorAll("#nav-xshop>a").forEach(url =>( url.innerHTML.toString().includes("Mais Vendidos") ? urls.push(url.getAttribute('href')) : null) )
+            return urls});
         
         
         await page.goto('https://www.amazon.com.br/' + html[0]);
-        
-        const code =  await page.waitForResponse((response) =>{ return response.status();} )
-        
-        const title = await page.title();
-        
-        let teste = await page.evaluate(() => {
+                 
+        let bestsellers = await page.evaluate(() => {
             let books = []
             document.querySelectorAll('div[class="a-section a-spacing-large"]').forEach((book)=>{
         
@@ -86,31 +82,29 @@ const getNewBestsellers = async (event) => {
             return books
         });
 
-        let aux = {bestsellers:teste,
+        let data = {bestsellers:bestsellers,
                     itemId:uuidv4()
         };
         
 
         await browser.close();
         
-        //console.log(marshall(aux));
-        //const body = JSON.stringify(aux);
         const params = {
             TableName: process.env.DYNAMODB_TABLE_NAME,
-            Item: marshall(aux || {}),
+            Item: marshall(data || {}),
         };
 
         const createResult = await db.send(new PutItemCommand(params));
 
         response.body = JSON.stringify({
-            message: "Successfully created post.",
-            aux,
+            message: "Successfully retrieved and saved new best sellers.",
+            data,
         });
     } catch (e) {
         console.error(e);
         response.statusCode = 500;
         response.body = JSON.stringify({
-            message: "Failed to create post.",
+            message: "Failed to retrieved new best sellers.",
             errorMsg: e.message,
             errorStack: e.stack,
         });
@@ -126,14 +120,14 @@ const getHistory = async () => {
         const { Items } = await db.send(new ScanCommand({ TableName: process.env.DYNAMODB_TABLE_NAME }));
 
         response.body = JSON.stringify({
-            message: "Successfully retrieved all posts.",
+            message: "Successfully retrieved all saved best sellers.",
             data: Items.map((item) => unmarshall(item)),
         });
     } catch (e) {
         console.error(e);
         response.statusCode = 500;
         response.body = JSON.stringify({
-            message: "Failed to retrieve posts.",
+            message: "Failed to retrieve all saved best sellers.",
             errorMsg: e.message,
             errorStack: e.stack,
         });
