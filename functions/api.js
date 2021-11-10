@@ -27,8 +27,7 @@ const getBestsellers = async (event) => {
         console.log({ Item });
         response.body = JSON.stringify({
             message: "Successfully retrieved post.",
-            data: (Item) ? unmarshall(Item) : {},
-            rawData: Item,
+            data: (Item) ? unmarshall(Item) : {}
         });
     } catch (e) {
         console.error(e);
@@ -105,7 +104,7 @@ const getNewBestsellers = async (event) => {
 
         response.body = JSON.stringify({
             message: "Successfully created post.",
-            createResult,
+            data:aux,
         });
     } catch (e) {
         console.error(e);
@@ -129,7 +128,6 @@ const getHistory = async () => {
         response.body = JSON.stringify({
             message: "Successfully retrieved all posts.",
             data: Items.map((item) => unmarshall(item)),
-            Items,
         });
     } catch (e) {
         console.error(e);
