@@ -15,7 +15,7 @@ Essa API possui três endpoints:
     
 
 * https://tz08inn2pc.execute-api.sa-east-1.amazonaws.com/dev/history
-    * Retorna todos os itens gravados no Dybamodb
+    * Retorna todos os itens gravados no Dynamodb
 
 ## Estrutura da Response:
 ```
