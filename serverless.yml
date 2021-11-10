@@ -8,6 +8,11 @@ provider:
   environment:
     DYNAMODB_TABLE_NAME: ${self:custom.bestsellersTableName}
 
+package:
+    exclude:
+        - node_modules/puppeteer/.local-chromium/**
+
+
 custom:
   bestsellersTableName: bestsellers-table-${self:provider.stage}
 

@@ -1,9 +1,10 @@
 const db = require("./db");
 const { v4: uuidv4 } = require('uuid');
 const chromium = require('chrome-aws-lambda');
-var dayjs = require('dayjs');
-const { addExtra } = require('puppeteer-extra');
-const puppeteerExtra = addExtra(chromium.puppeteer);
+//var dayjs = require('dayjs');
+//const { addExtra } = require('puppeteer-extra');
+//const puppeteerExtra = addExtra(chromium.puppeteer);
+const puppeteer = require('puppeteer-core');
 const {
     GetItemCommand,
     PutItemCommand,
@@ -47,7 +48,7 @@ const getNewBestsellers = async (event) => {
 
     try {
 
-        const browser = await puppeteerExtra.launch({
+        const browser = await puppeteer.launch({
             args: chromium.args,
             executablePath: await chromium.executablePath,
             headless: true,
@@ -99,7 +100,7 @@ const getNewBestsellers = async (event) => {
             TableName: process.env.DYNAMODB_TABLE_NAME,
             Item: marshall(aux || {}),
         };
-        
+
         const createResult = await db.send(new PutItemCommand(params));
 
         response.body = JSON.stringify({
