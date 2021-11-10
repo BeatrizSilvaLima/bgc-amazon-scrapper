@@ -99,6 +99,7 @@ const getNewBestsellers = async (event) => {
             TableName: process.env.DYNAMODB_TABLE_NAME,
             Item: marshall(aux || {}),
         };
+        
         const createResult = await db.send(new PutItemCommand(params));
 
         response.body = JSON.stringify({
